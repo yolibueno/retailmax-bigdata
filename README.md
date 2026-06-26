@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # RetailMax Big Data — Manual Técnico
 
 Manual técnico end-to-end del proyecto **RetailMax Big Data**, que documenta la arquitectura
@@ -51,3 +52,7 @@ start docs/manual_retailmax_bigdata.html
 ## 👤 Autor
 
 **Yoli Bueno Tulumba** — Universidad Peruana Unión, Ciclo 9, Curso de Big Data
+=======
+# retailmax-bigdata
+Manual técnico y pipeline Big Data del proyecto RetailMax
+>>>>>>> f73ad762892931cd1272c27bd38df3c8b30732b1
