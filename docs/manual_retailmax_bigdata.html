@@ -1,0 +1,2152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual Técnico — RetailMax Big Data</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap');
+
+  :root {
+    --bg:        #0d1117;
+    --bg2:       #161b22;
+    --bg3:       #1c2333;
+    --border:    #30363d;
+    --green:     #39d353;
+    --green-dim: #196c2e;
+    --cyan:      #58a6ff;
+    --orange:    #f0883e;
+    --red:       #ff7b72;
+    --purple:    #bc8cff;
+    --text:      #e6edf3;
+    --text-dim:  #8b949e;
+    --text-muted:#484f58;
+    --yellow:    #d29922;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 260px;
+    height: 100vh;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    padding: 24px 0;
+  }
+
+  .sidebar-logo {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+
+  .sidebar-logo .logo-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .sidebar-logo h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    color: var(--text);
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+
+  .sidebar-logo h2 span { color: var(--green); }
+
+  .nav-section {
+    padding: 4px 12px;
+    margin-bottom: 4px;
+  }
+
+  .nav-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 8px 4px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--text-dim);
+    font-size: 12.5px;
+    transition: all 0.15s;
+  }
+
+  .nav-item:hover {
+    background: var(--bg3);
+    color: var(--text);
+  }
+
+  .nav-item .step-badge {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--green);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    min-width: 28px;
+    text-align: center;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: 260px;
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #0d1117 0%, #0d2137 50%, #0d1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(57,211,83,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(57,211,83,0.1);
+    border: 1px solid rgba(57,211,83,0.3);
+    color: var(--green);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .hero h1 span { color: var(--green); }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text-dim);
+    max-width: 580px;
+    margin-bottom: 32px;
+    line-height: 1.8;
+  }
+
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+
+  .tag-h { color: var(--orange); border-color: rgba(240,136,62,0.4); background: rgba(240,136,62,0.08); }
+  .tag-s { color: var(--cyan); border-color: rgba(88,166,255,0.4); background: rgba(88,166,255,0.08); }
+  .tag-p { color: var(--purple); border-color: rgba(188,140,255,0.4); background: rgba(188,140,255,0.08); }
+  .tag-st { color: var(--green); border-color: rgba(57,211,83,0.4); background: rgba(57,211,83,0.08); }
+
+  /* ── CONTENT ── */
+  .content { padding: 0 60px 80px; }
+
+  /* ── PHASE HEADER ── */
+  .phase {
+    margin-top: 64px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .phase-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+
+  .phase h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .phase p {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-top: 6px;
+    max-width: 680px;
+  }
+
+  /* ── STEP ── */
+  .step {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .step-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--green-dim);
+    border: 1px solid var(--green);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .step-title {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text);
+  }
+
+  .step-badge-type {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    border: 1px solid;
+  }
+
+  .type-config { color: var(--orange); border-color: rgba(240,136,62,0.4); background: rgba(240,136,62,0.08); }
+  .type-install { color: var(--cyan); border-color: rgba(88,166,255,0.4); background: rgba(88,166,255,0.08); }
+  .type-run { color: var(--green); border-color: rgba(57,211,83,0.4); background: rgba(57,211,83,0.08); }
+  .type-verify { color: var(--purple); border-color: rgba(188,140,255,0.4); background: rgba(188,140,255,0.08); }
+  .type-fix { color: var(--red); border-color: rgba(255,123,114,0.4); background: rgba(255,123,114,0.08); }
+  .type-code { color: var(--yellow); border-color: rgba(210,153,34,0.4); background: rgba(210,153,34,0.08); }
+
+  .step-body {
+    padding: 16px 20px;
+  }
+
+  .step-desc {
+    color: var(--text-dim);
+    font-size: 13.5px;
+    margin-bottom: 14px;
+    line-height: 1.7;
+  }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    background: #010409;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 12px 0;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .code-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #febc2e; }
+  .dot-g { background: #28c840; }
+
+  .code-lang {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .code-block pre {
+    padding: 16px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.8;
+    color: #cdd9e5;
+  }
+
+  .code-block pre .comment { color: #6e7681; font-style: italic; }
+  .code-block pre .cmd     { color: #79c0ff; }
+  .code-block pre .flag    { color: #d2a8ff; }
+  .code-block pre .path    { color: #a5d6ff; }
+  .code-block pre .value   { color: #a8ff97; }
+  .code-block pre .xml-tag { color: #7ee787; }
+  .code-block pre .xml-val { color: #a8ff97; }
+  .code-block pre .key     { color: #ff7b72; }
+  .code-block pre .py-kw   { color: #ff7b72; }
+  .code-block pre .py-fn   { color: #d2a8ff; }
+  .code-block pre .py-str  { color: #a8ff97; }
+  .code-block pre .py-cmt  { color: #6e7681; font-style: italic; }
+
+  /* ── INFO BOX ── */
+  .info-box {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 7px;
+    font-size: 13px;
+    margin: 12px 0;
+    line-height: 1.6;
+  }
+
+  .info-box .icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .ib-info  { background: rgba(88,166,255,0.08); border-left: 3px solid var(--cyan); color: #aecbfa; }
+  .ib-warn  { background: rgba(210,153,34,0.08); border-left: 3px solid var(--yellow); color: #dba729; }
+  .ib-error { background: rgba(255,123,114,0.08); border-left: 3px solid var(--red); color: var(--red); }
+  .ib-ok    { background: rgba(57,211,83,0.08); border-left: 3px solid var(--green); color: var(--green); }
+
+  /* ── XML BLOCK ── */
+  .xml-block {
+    background: #010409;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 12px 0;
+  }
+
+  .xml-block .code-header { background: var(--bg3); }
+
+  .xml-block pre {
+    padding: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    overflow-x: auto;
+    color: #cdd9e5;
+  }
+
+  /* ── ARCHITECTURE DIAGRAM ── */
+  .arch-diagram {
+    background: #010409;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 30px;
+    margin: 20px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 2;
+    overflow-x: auto;
+  }
+
+  /* ── KPI TABLE ── */
+  .kpi-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 16px 0;
+  }
+
+  .kpi-table th {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .kpi-table td {
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    vertical-align: top;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  .kpi-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .kpi-table .kpi-num { color: var(--green); font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .kpi-table .kpi-name { color: var(--text); font-weight: 500; }
+
+  /* ── ERROR CARD ── */
+  .error-card {
+    background: rgba(255,123,114,0.05);
+    border: 1px solid rgba(255,123,114,0.3);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 14px 0;
+  }
+
+  .error-card-header {
+    background: rgba(255,123,114,0.1);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--red);
+    border-bottom: 1px solid rgba(255,123,114,0.2);
+  }
+
+  .error-card-body { padding: 14px 16px; }
+
+  .error-msg {
+    background: #010409;
+    border: 1px solid rgba(255,123,114,0.2);
+    border-radius: 5px;
+    padding: 10px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--red);
+    margin-bottom: 10px;
+  }
+
+  .error-sol-title {
+    font-size: 12px;
+    color: var(--green);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .error-sol-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  /* ── GRID 2 COL ── */
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 12px 0;
+  }
+
+  /* ── VM CARD ── */
+  .vm-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .vm-card-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--green);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .vm-card table { width: 100%; font-size: 12.5px; }
+  .vm-card td { padding: 3px 0; color: var(--text-dim); }
+  .vm-card td:first-child { color: var(--text-muted); width: 120px; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .vm-card td strong { color: var(--text); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 30px 60px;
+    margin-left: 260px;
+    font-size: 13px;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer span { font-family: 'JetBrains Mono', monospace; }
+
+  /* ── PROGRESS LINE ── */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 20px 0;
+    overflow-x: auto;
+    padding: 4px 0;
+  }
+
+  .pipe-node {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 11.5px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  .pipe-arrow {
+    color: var(--green);
+    padding: 0 6px;
+    font-size: 14px;
+  }
+
+  .pipe-node.active { border-color: var(--green); color: var(--green); background: rgba(57,211,83,0.08); }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main, footer { margin-left: 0; }
+    .hero, .content { padding: 40px 24px; }
+    .grid2 { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════ SIDEBAR ══════════════════════════ -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-tag">// manual técnico</div>
+    <h2>RetailMax<br><span>Big Data</span></h2>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Arquitectura</div>
+    <a class="nav-item" href="#arch"><span class="step-badge">00</span>Visión general</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Fase 1 — Infraestructura</div>
+    <a class="nav-item" href="#vms"><span class="step-badge">01</span>Máquinas virtuales</a>
+    <a class="nav-item" href="#so"><span class="step-badge">02</span>Sistema operativo</a>
+    <a class="nav-item" href="#ssh"><span class="step-badge">03</span>SSH sin contraseña</a>
+    <a class="nav-item" href="#java"><span class="step-badge">04</span>Java JDK 8</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Fase 2 — Hadoop</div>
+    <a class="nav-item" href="#hadoop-install"><span class="step-badge">05</span>Instalar Hadoop</a>
+    <a class="nav-item" href="#hadoop-env"><span class="step-badge">06</span>Variables entorno</a>
+    <a class="nav-item" href="#hadoop-xml"><span class="step-badge">07</span>Archivos XML</a>
+    <a class="nav-item" href="#hadoop-start"><span class="step-badge">08</span>Iniciar HDFS + YARN</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Fase 3 — Spark</div>
+    <a class="nav-item" href="#spark-install"><span class="step-badge">09</span>Instalar Spark</a>
+    <a class="nav-item" href="#spark-config"><span class="step-badge">10</span>Configurar Spark</a>
+    <a class="nav-item" href="#spark-start"><span class="step-badge">11</span>Iniciar clúster</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Fase 4 — Dataset</div>
+    <a class="nav-item" href="#dataset"><span class="step-badge">12</span>Cargar dataset HDFS</a>
+    <a class="nav-item" href="#pipeline"><span class="step-badge">13</span>Pipeline PySpark</a>
+    <a class="nav-item" href="#export"><span class="step-badge">14</span>Exportar CSV</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Fase 5 — Dashboard</div>
+    <a class="nav-item" href="#streamlit-install"><span class="step-badge">15</span>Instalar Streamlit</a>
+    <a class="nav-item" href="#app-code"><span class="step-badge">16</span>Código app.py</a>
+    <a class="nav-item" href="#kpis"><span class="step-badge">17</span>Los 10 KPIs</a>
+    <a class="nav-item" href="#run"><span class="step-badge">18</span>Ejecutar dashboard</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Solución de errores</div>
+    <a class="nav-item" href="#errors"><span class="step-badge">ERR</span>Errores comunes</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════ MAIN ══════════════════════════ -->
+<main class="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">◉ MANUAL TÉCNICO v2.0</div>
+    <h1>Proyecto <span>RetailMax</span><br>Big Data — End to End</h1>
+    <p class="hero-sub">
+      Guía completa de implementación: desde la creación de las máquinas virtuales
+      hasta el dashboard ejecutivo con los 10 KPIs. Cada comando explicado y comentado.
+    </p>
+    <div class="hero-tags">
+      <span class="hero-tag tag-h">Hadoop 3.3.6</span>
+      <span class="hero-tag tag-s">Apache Spark 3.5.1</span>
+      <span class="hero-tag tag-s">HDFS + YARN</span>
+      <span class="hero-tag tag-p">Python 3.11</span>
+      <span class="hero-tag tag-p">PySpark</span>
+      <span class="hero-tag tag-st">Streamlit</span>
+      <span class="hero-tag tag-st">Plotly</span>
+      <span class="hero-tag tag-h">Ubuntu Server 24.04</span>
+    </div>
+  </section>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ════════ ARQUITECTURA ════════ -->
+    <div class="phase" id="arch">
+      <div class="phase-tag">// SECCIÓN 00</div>
+      <h2>Arquitectura del Proyecto</h2>
+      <p>Antes de ejecutar cualquier comando es fundamental entender qué estamos construyendo y cómo se comunican los componentes.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">00</div>
+        <div class="step-title">Topología Master + Workers (Clúster distribuido)</div>
+        <span class="step-badge-type type-config">ARQUITECTURA</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">El proyecto usa un clúster de 4 nodos: 1 Master y 3 Workers. El nodo Master coordina todo; los Workers procesan y almacenan datos.</p>
+
+        <div class="arch-diagram">
+<pre style="color:#cdd9e5; font-family:'JetBrains Mono',monospace;">
+  ┌─────────────────────────────────────────────────────────────────┐
+  │                    NODO MASTER (master)                         │
+  │   IP: 10.243.52.38  RAM: 8GB   CPU: 4 núcleos   Disco: 40GB     │
+  │                                                                 │
+  │  ┌───────────┐  ┌────────────┐  ┌──────────────┐                │
+  │  │ NameNode  │  │ResourceMgr │  │  Spark Master│                │
+  │  │  (HDFS)   │  │  (YARN)    │  │  :7077/:8080 │                │
+  │  └─────┬─────┘  └─────┬──────┘  └──────┬───────┘                │
+  └────────┼──────────────┼────────────────┼─────────────────────---┘
+           │              │                │
+     ──────┼──────────────┼────────────────┼──── (SSH / red interna)
+           │              │                │
+  ┌────────▼──────────────▼────────────────▼───────────┐
+  │           WORKERS (worker1, worker2, worker3)      │
+  │   ┌──────────┐   ┌────────────┐   ┌─────────────┐  │
+  │   │ DataNode │   │ NodeManager│   │ Spark Worker│  │
+  │   │  (HDFS)  │   │  (YARN)    │   │  (ejecutor) │  │
+  │   └──────────┘   └────────────┘   └─────────────┘  │
+  │   (x3 nodos — cada uno guarda bloques de 128MB)    │
+  └────────────────────────────────────────────────────┘
+           │
+           ▼
+  ┌─────────────────────────────────┐
+  │   HDFS — retail_sales_dataset   │
+  │   /retail_project/              │
+  │   120,000 registros de ventas   │
+  └─────────────────────────────────┘
+           │
+           ▼  PySpark ETL Pipeline
+  ┌─────────────────────────────────┐
+  │   /home/hadoop/data/            │
+  │   kpi_sales.csv  (local)        │
+  └─────────────────────────────────┘
+           │
+           ▼  Streamlit
+  ┌─────────────────────────────────┐
+  │   Dashboard Ejecutivo :8501     │
+  │   10 KPIs + 6 gráficos         │
+  └─────────────────────────────────┘
+</pre>
+        </div>
+
+        <div class="grid2">
+          <div class="vm-card">
+            <div class="vm-card-title">▣ Nodo MASTER</div>
+            <table>
+              <tr><td>Hostname</td><td><strong>master</strong></td></tr>
+              <tr><td>RAM</td><td><strong>8 GB</strong></td></tr>
+              <tr><td>CPU</td><td><strong>4 núcleos</strong></td></tr>
+              <tr><td>Disco</td><td><strong>40 GB</strong></td></tr>
+              <tr><td>SO</td><td><strong>Ubuntu Server 24.04</strong></td></tr>
+              <tr><td>Servicios</td><td><strong>NameNode, ResourceManager, Spark Master, Streamlit</strong></td></tr>
+            </table>
+          </div>
+          <div class="vm-card">
+            <div class="vm-card-title">▣ Nodos WORKER (×3)</div>
+            <table>
+              <tr><td>Hostnames</td><td><strong>worker1, worker2, worker3</strong></td></tr>
+              <tr><td>RAM</td><td><strong>4 GB c/u</strong></td></tr>
+              <tr><td>CPU</td><td><strong>2 núcleos c/u</strong></td></tr>
+              <tr><td>Disco</td><td><strong>20 GB c/u</strong></td></tr>
+              <tr><td>SO</td><td><strong>Ubuntu Server 24.04</strong></td></tr>
+              <tr><td>Servicios</td><td><strong>DataNode, NodeManager, Spark Worker</strong></td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="info-box ib-info">
+          <span class="icon">ℹ</span>
+          <div><strong>¿Por qué esta arquitectura?</strong> Hadoop requiere al menos un nodo que coordine (Master) y nodos que almacenen/procesen (Workers). HDFS replica los datos en 3 bloques por defecto, por eso tener 3 workers es lo ideal.</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════ FASE 1: INFRAESTRUCTURA ════════ -->
+    <div class="phase" id="vms">
+      <div class="phase-tag">// FASE 01</div>
+      <h2>Creación de las Máquinas Virtuales</h2>
+      <p>Creamos los 4 nodos desde cero usando VirtualBox o VMware con Ubuntu Server 24.04.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">01</div>
+        <div class="step-title">Crear las 4 VMs en VirtualBox / VMware</div>
+        <span class="step-badge-type type-config">CONFIGURACIÓN</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Cada VM se configura con Ubuntu Server 24.04 LTS. Para el Master más recursos, para los Workers menos. Todas deben estar en la <strong>misma red interna</strong> (NAT Network o Host-Only con IP estática).</p>
+
+        <div class="info-box ib-info">
+          <span class="icon">ℹ</span>
+          <div>En VirtualBox: <strong>Archivo → Preferencias → Red → Redes NAT</strong> → Crear red "hadoopnet". Luego cada VM → Adaptador 1 → Red NAT → hadoopnet.</div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Verificar IP de cada VM al arrancar</span>
+          </div>
+          <pre><span class="comment"># En cada VM, al arrancar, obtener su IP</span>
+<span class="cmd">ip</span> <span class="flag">addr show</span>
+
+<span class="comment"># O también:</span>
+<span class="cmd">hostname</span> <span class="flag">-I</span>
+
+<span class="comment"># Anotar la IP de cada máquina, por ejemplo:</span>
+<span class="comment"># master   → 10.243.52.38</span>
+<span class="comment"># Slave1  → 10.243.52.62</span>
+<span class="comment"># Slave2  → 10.243.52.63</span>
+<span class="comment"># Slave3  → 10.243.52.127</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" id="so">
+      <div class="step-header">
+        <div class="step-num">02</div>
+        <div class="step-title">Preparar el Sistema Operativo (en TODOS los nodos)</div>
+        <span class="step-badge-type type-install">INSTALACIÓN</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Estos comandos se ejecutan en el nodo Master Y en todos los Workers. Preparamos el sistema, creamos el usuario hadoop y configuramos la red interna.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — En TODOS los nodos</span>
+          </div>
+          <pre><span class="comment"># 1. Actualizar el sistema</span>
+<span class="comment"># apt update → actualiza la lista de paquetes disponibles</span>
+<span class="comment"># apt upgrade → instala las versiones más nuevas</span>
+<span class="comment"># -y → responde "sí" a todas las preguntas automáticamente</span>
+<span class="cmd">sudo</span> apt update && <span class="cmd">sudo</span> apt upgrade <span class="flag">-y</span>
+
+<span class="comment"># 2. Crear usuario hadoop (NUNCA trabajar con root)</span>
+<span class="comment"># adduser → crea el usuario y su carpeta home en /home/hadoop</span>
+<span class="cmd">sudo</span> adduser hadoop
+
+<span class="comment"># 3. Agregar hadoop al grupo sudo (permisos de administrador)</span>
+<span class="comment"># usermod → modifica el usuario</span>
+<span class="comment"># -aG sudo → agrega (append) al grupo sudo</span>
+<span class="cmd">sudo</span> usermod <span class="flag">-aG</span> sudo hadoop
+
+<span class="comment"># 4. Cambiar al usuario hadoop</span>
+<span class="cmd">su</span> - hadoop</pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Configurar hostnames y /etc/hosts (en TODOS los nodos)</span>
+          </div>
+          <pre><span class="comment"># En el nodo MASTER → cambiar hostname a "master"</span>
+<span class="comment"># hostnamectl → herramienta para gestionar el hostname del sistema</span>
+<span class="cmd">sudo</span> hostnamectl set-hostname master
+
+<span class="comment"># En worker1 → hostname "worker1"</span>
+<span class="cmd">sudo</span> hostnamectl set-hostname worker1
+
+<span class="comment"># En worker2 → hostname "worker2"</span>
+<span class="cmd">sudo</span> hostnamectl set-hostname worker2
+
+<span class="comment"># En worker3 → hostname "worker3"</span>
+<span class="cmd">sudo</span> hostnamectl set-hostname worker3
+
+<span class="comment">### ─── EN TODOS LOS NODOS: editar /etc/hosts ───────────────</span>
+<span class="comment"># /etc/hosts → archivo que resuelve nombres a IPs sin necesidad de DNS</span>
+<span class="comment"># Hadoop necesita resolver "master", "worker1", etc. por nombre</span>
+<span class="cmd">sudo</span> nano /etc/hosts
+
+<span class="comment"># Agregar al final del archivo (ajustar IPs a las reales de tu red):</span>
+<span class="value">10.243.52.38  master</span>
+<span class="value">10.243.52.62  Slave1</span>
+<span class="value">10.243.52.63  Slave2</span>
+<span class="value">10.243.52.127  Slave3</span>
+
+<span class="comment"># Verificar que funciona</span>
+<span class="cmd">ping</span> master <span class="flag">-c 3</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" id="ssh">
+      <div class="step-header">
+        <div class="step-num">03</div>
+        <div class="step-title">Configurar SSH sin contraseña (Master → Workers)</div>
+        <span class="step-badge-type type-config">CONFIGURACIÓN</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Hadoop y Spark necesitan comunicarse entre nodos sin pedir contraseña. Generamos un par de llaves SSH y las copiamos a todos los nodos.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — En TODOS los nodos: instalar SSH</span>
+          </div>
+          <pre><span class="comment"># Instalar servidor SSH (para recibir conexiones)</span>
+<span class="cmd">sudo</span> apt install <span class="flag">-y</span> openssh-server openssh-client
+
+<span class="comment"># Iniciar el servicio SSH</span>
+<span class="cmd">sudo</span> systemctl enable ssh
+<span class="cmd">sudo</span> systemctl start ssh</pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Solo en el MASTER: generar y distribuir llaves</span>
+          </div>
+          <pre><span class="comment"># Cambiar al usuario hadoop</span>
+<span class="cmd">su</span> - hadoop
+
+<span class="comment"># Generar par de llaves RSA</span>
+<span class="comment"># ssh-keygen → genera el par clave pública/privada</span>
+<span class="comment"># -t rsa → tipo de cifrado RSA</span>
+<span class="comment"># -b 4096 → longitud de 4096 bits (más seguro)</span>
+<span class="comment"># -C → comentario identificador</span>
+<span class="comment"># Cuando pregunte passphrase → presionar ENTER (sin contraseña)</span>
+<span class="cmd">ssh-keygen</span> <span class="flag">-t</span> rsa <span class="flag">-b</span> 4096 <span class="flag">-C</span> <span class="value">"hadoop@master"</span>
+
+<span class="comment"># Copiar la llave pública a todos los nodos (incluyendo el master mismo)</span>
+<span class="comment"># ssh-copy-id → copia la clave pública al archivo authorized_keys del destino</span>
+<span class="cmd">ssh-copy-id</span> hadoop@master
+<span class="cmd">ssh-copy-id</span> hadoop@worker1
+<span class="cmd">ssh-copy-id</span> hadoop@worker2
+<span class="cmd">ssh-copy-id</span> hadoop@worker3
+
+<span class="comment"># Verificar que funciona (debe entrar SIN pedir contraseña)</span>
+<span class="cmd">ssh</span> hadoop@worker1
+<span class="cmd">exit</span>
+<span class="cmd">ssh</span> hadoop@worker2
+<span class="cmd">exit</span></pre>
+        </div>
+
+        <div class="info-box ib-ok">
+          <span class="icon">✓</span>
+          <div>Si al ejecutar <code>ssh hadoop@worker1</code> entras directamente sin contraseña, el SSH está configurado correctamente.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" id="java">
+      <div class="step-header">
+        <div class="step-num">04</div>
+        <div class="step-title">Instalar Java JDK 8 (en TODOS los nodos)</div>
+        <span class="step-badge-type type-install">INSTALACIÓN</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Hadoop y Spark están escritos en Java/Scala. Requieren Java JDK 8 (o 11) para funcionar. Se instala en todos los nodos.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — En TODOS los nodos</span>
+          </div>
+          <pre><span class="comment"># Instalar OpenJDK 8</span>
+<span class="comment"># openjdk-8-jdk → implementación libre de Java Development Kit versión 8</span>
+<span class="cmd">sudo</span> apt install <span class="flag">-y</span> openjdk-8-jdk
+
+<span class="comment"># Verificar instalación → debe mostrar: openjdk version "1.8.x"</span>
+<span class="cmd">java</span> <span class="flag">-version</span>
+
+<span class="comment"># Obtener la ruta exacta de Java (necesaria para configurar JAVA_HOME)</span>
+<span class="comment"># update-alternatives → gestiona qué versión de Java está activa</span>
+<span class="cmd">update-alternatives</span> <span class="flag">--display</span> java
+
+<span class="comment"># Resultado típico: /usr/lib/jvm/java-8-openjdk-amd64</span>
+<span class="comment"># Anotar esa ruta, la usaremos en el siguiente paso</span></pre>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════ FASE 2: HADOOP ════════ -->
+    <div class="phase" id="hadoop-install">
+      <div class="phase-tag">// FASE 02</div>
+      <h2>Instalación y Configuración de Hadoop</h2>
+      <p>Instalamos Hadoop 3.3.6 y configuramos HDFS + YARN en el clúster completo.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">05</div>
+        <div class="step-title">Descargar e instalar Hadoop 3.3.6</div>
+        <span class="step-badge-type type-install">INSTALACIÓN</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Descargamos Hadoop desde el sitio oficial de Apache, lo extraemos y lo ubicamos en <code>/opt/hadoop</code>. Esto se hace en TODOS los nodos.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — En TODOS los nodos</span>
+          </div>
+          <pre><span class="comment"># Ir al directorio temporal para la descarga</span>
+<span class="cmd">cd</span> /tmp
+
+<span class="comment"># Descargar Hadoop 3.3.6 desde el mirror de Apache</span>
+<span class="comment"># wget → descargador de archivos por HTTP/HTTPS</span>
+<span class="cmd">wget</span> https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
+
+<span class="comment"># Extraer el archivo comprimido</span>
+<span class="comment"># tar → empaquetador/desempaquetador</span>
+<span class="comment"># -x → extraer</span>
+<span class="comment"># -z → descomprimir con gzip (.gz)</span>
+<span class="comment"># -f → indicar el nombre del archivo</span>
+<span class="cmd">tar</span> <span class="flag">-xzf</span> hadoop-3.3.6.tar.gz
+
+<span class="comment"># Mover al directorio /opt (donde van las aplicaciones opcionales)</span>
+<span class="cmd">sudo</span> mv hadoop-3.3.6 /opt/hadoop
+
+<span class="comment"># Dar propiedad al usuario hadoop</span>
+<span class="comment"># chown → cambia el propietario del directorio</span>
+<span class="comment"># -R → recursivo (incluye todos los subdirectorios)</span>
+<span class="cmd">sudo</span> chown <span class="flag">-R</span> hadoop:hadoop /opt/hadoop
+
+<span class="comment"># Verificar que existe el directorio</span>
+<span class="cmd">ls</span> /opt/hadoop</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" id="hadoop-env">
+      <div class="step-header">
+        <div class="step-num">06</div>
+        <div class="step-title">Configurar Variables de Entorno</div>
+        <span class="step-badge-type type-config">CONFIGURACIÓN</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Las variables de entorno le dicen al sistema dónde encontrar Hadoop, Java y Spark. Se configuran en el archivo <code>~/.bashrc</code> de cada nodo.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — En TODOS los nodos: editar ~/.bashrc</span>
+          </div>
+          <pre><span class="comment"># Abrir el archivo de configuración de Bash</span>
+<span class="comment"># ~/.bashrc → se ejecuta cada vez que abres una terminal</span>
+<span class="cmd">nano</span> ~/.bashrc
+
+<span class="comment"># Agregar al FINAL del archivo:</span>
+<span class="comment"># ─── JAVA ───────────────────────────────────</span>
+<span class="comment"># JAVA_HOME → ruta donde está instalado Java</span>
+<span class="value">export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64</span>
+
+<span class="comment"># ─── HADOOP ─────────────────────────────────</span>
+<span class="comment"># HADOOP_HOME → ruta de instalación de Hadoop</span>
+<span class="value">export HADOOP_HOME=/opt/hadoop</span>
+
+<span class="comment"># HADOOP_CONF_DIR → dónde están los XML de configuración</span>
+<span class="value">export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop</span>
+
+<span class="comment"># ─── SPARK ──────────────────────────────────</span>
+<span class="comment"># SPARK_HOME → ruta de instalación de Spark (lo instalaremos después)</span>
+<span class="value">export SPARK_HOME=/opt/spark</span>
+
+<span class="comment"># ─── PATH ───────────────────────────────────</span>
+<span class="comment"># PATH → le dice al sistema dónde buscar los ejecutables</span>
+<span class="comment"># $PATH → mantiene los directorios que ya estaban</span>
+<span class="value">export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$SPARK_HOME/bin:$SPARK_HOME/sbin</span>
+
+<span class="comment"># Aplicar los cambios sin reiniciar la terminal</span>
+<span class="comment"># source → recarga el archivo de configuración en la sesión actual</span>
+<span class="cmd">source</span> ~/.bashrc
+
+<span class="comment"># Verificar que las variables quedaron bien</span>
+<span class="cmd">echo</span> $JAVA_HOME
+<span class="cmd">echo</span> $HADOOP_HOME
+<span class="cmd">echo</span> $SPARK_HOME</pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Configurar hadoop-env.sh</span>
+          </div>
+          <pre><span class="comment"># hadoop-env.sh → variables de entorno específicas de Hadoop</span>
+<span class="comment"># Aquí indicamos a Hadoop qué Java usar</span>
+<span class="cmd">nano</span> /opt/hadoop/etc/hadoop/hadoop-env.sh
+
+<span class="comment"># Buscar la línea: export JAVA_HOME= y modificarla a:</span>
+<span class="value">export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" id="hadoop-xml">
+      <div class="step-header">
+        <div class="step-num">07</div>
+        <div class="step-title">Configurar los archivos XML de Hadoop</div>
+        <span class="step-badge-type type-config">CONFIGURACIÓN</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Hadoop se configura mediante 4 archivos XML. Estos van en <code>/opt/hadoop/etc/hadoop/</code> y deben ser idénticos en TODOS los nodos.</p>
+
+        <p class="step-desc" style="margin-top:8px;"><strong style="color:var(--cyan)">core-site.xml</strong> — Define el sistema de archivos principal (HDFS) y su dirección.</p>
+
+        <div class="xml-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">XML — /opt/hadoop/etc/hadoop/core-site.xml</span>
+          </div>
+          <pre><span class="xml-tag">&lt;configuration&gt;</span>
+  <span class="xml-tag">&lt;property&gt;</span>
+    <span class="comment">&lt;!-- fs.defaultFS → URI del sistema de archivos por defecto --&gt;</span>
+    <span class="comment">&lt;!-- hdfs://master:9000 → usa HDFS en el nodo "master" puerto 9000 --&gt;</span>
+    <span class="xml-tag">&lt;name&gt;</span>fs.defaultFS<span class="xml-tag">&lt;/name&gt;</span>
+    <span class="xml-tag">&lt;value&gt;</span><span class="xml-val">hdfs://master:9000</span><span class="xml-tag">&lt;/value&gt;</span>
+  <span class="xml-tag">&lt;/property&gt;</span>
+  <span class="xml-tag">&lt;property&gt;</span>
+    <span class="comment">&lt;!-- hadoop.tmp.dir → directorio temporal de Hadoop --&gt;</span>
+    <span class="xml-tag">&lt;name&gt;</span>hadoop.tmp.dir<span class="xml-tag">&lt;/name&gt;</span>
+    <span class="xml-tag">&lt;value&gt;</span><span class="xml-val">/home/hadoop/hadooptmpdata</span><span class="xml-tag">&lt;/value&gt;</span>
+  <span class="xml-tag">&lt;/property&gt;</span>
+<span class="xml-tag">&lt;/configuration&gt;</span></pre>
+        </div>
+
+        <p class="step-desc" style="margin-top:16px;"><strong style="color:var(--cyan)">hdfs-site.xml</strong> — Configura HDFS: factor de replicación de bloques y rutas de almacenamiento.</p>
+
+        <div class="xml-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">XML — /opt/hadoop/etc/hadoop/hdfs-site.xml</span>
+          </div>
+          <pre><span class="xml-tag">&lt;configuration&gt;</span>
+  <span class="xml-tag">&lt;property&gt;</span>
+    <span class="comment">&lt;!-- dfs.replication → cuántas copias guarda HDFS de cada bloque --&gt;</span>
+    <span class="comment">&lt;!-- 3 = ideal con 3 workers (una copia por nodo) --&gt;</span>
+    <span class="xml-tag">&lt;name&gt;</span>dfs.replication<span class="xml-tag">&lt;/name&gt;</span>
+    <span class="xml-tag">&lt;value&gt;</span><span class="xml-val">3</span><span class="xml-tag">&lt;/value&gt;</span>
+  <span class="xml-tag">&lt;/property&gt;</span>
+  <span class="xml-tag">&lt;property&gt;</span>
+    <span class="comment">&lt;!-- namenode.name.dir → dónde el NameNode guarda los metadatos --&gt;</span>
+    <span class="xml-tag">&lt;name&gt;</span>dfs.namenode.name.dir<span class="xml-tag">&lt;/name&gt;</span>
+    <span class="xml-tag">&lt;value&gt;</span><span class="xml-val">file:///home/hadoop/hdfs/namenode</span><span class="xml-tag">&lt;/value&gt;</span>
+  <span class="xml-tag">&lt;/property&gt;</span>
+  <span class="xml-tag">&lt;property&gt;</span>
+    <span class="comment">&lt;!-- datanode.data.dir → dónde los DataNodes guardan los bloques --&gt;</span>
+    <span class="xml-tag">&lt;name&gt;</span>dfs.datanode.data.dir<span class="xml-tag">&lt;/name&gt;</span>
+    <span class="xml-tag">&lt;value&gt;</span><span class="xml-val">file:///home/hadoop/hdfs/datanode</span><span class="xml-tag">&lt;/value&gt;</span>
+  <span class="xml-tag">&lt;/property&gt;</span>
+<span class="xml-tag">&lt;/configuration&gt;</span></pre>
+        </div>
+
+        <p class="step-desc" style="margin-top:16px;"><strong style="color:var(--cyan)">mapred-site.xml</strong> — Configura MapReduce para usar YARN como gestor de recursos.</p>
+
+        <div class="xml-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">XML — /opt/hadoop/etc/hadoop/mapred-site.xml</span>
+          </div>
+          <pre><span class="xml-tag">&lt;configuration&gt;</span>
+  <span class="xml-tag">&lt;property&gt;</span>
+    <span class="comment">&lt;!-- mapreduce.framework.name → framework de procesamiento --&gt;</span>
+    <span class="comment">&lt;!-- "yarn" → usa YARN para gestionar la asignación de recursos --&gt;</span>
+    <span class="xml-tag">&lt;name&gt;</span>mapreduce.framework.name<span class="xml-tag">&lt;/name&gt;</span>
+    <span class="xml-tag">&lt;value&gt;</span><span class="xml-val">yarn</span><span class="xml-tag">&lt;/value&gt;</span>
+  <span class="xml-tag">&lt;/property&gt;</span>
+<span class="xml-tag">&lt;/configuration&gt;</span></pre>
+        </div>
+
+        <p class="step-desc" style="margin-top:16px;"><strong style="color:var(--cyan)">yarn-site.xml</strong> — Configura YARN: gestor de recursos del clúster.</p>
+
+        <div class="xml-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">XML — /opt/hadoop/etc/hadoop/yarn-site.xml</span>
+          </div>
+          <pre><span class="xml-tag">&lt;configuration&gt;</span>
+  <span class="xml-tag">&lt;property&gt;</span>
+    <span class="comment">&lt;!-- yarn.resourcemanager.hostname → nodo donde corre el ResourceManager --&gt;</span>
+    <span class="xml-tag">&lt;name&gt;</span>yarn.resourcemanager.hostname<span class="xml-tag">&lt;/name&gt;</span>
+    <span class="xml-tag">&lt;value&gt;</span><span class="xml-val">master</span><span class="xml-tag">&lt;/value&gt;</span>
+  <span class="xml-tag">&lt;/property&gt;</span>
+  <span class="xml-tag">&lt;property&gt;</span>
+    <span class="comment">&lt;!-- nodemanager.aux-services → servicio auxiliar para shuffle de MapReduce --&gt;</span>
+    <span class="xml-tag">&lt;name&gt;</span>yarn.nodemanager.aux-services<span class="xml-tag">&lt;/name&gt;</span>
+    <span class="xml-tag">&lt;value&gt;</span><span class="xml-val">mapreduce_shuffle</span><span class="xml-tag">&lt;/value&gt;</span>
+  <span class="xml-tag">&lt;/property&gt;</span>
+  <span class="xml-tag">&lt;property&gt;</span>
+    <span class="comment">&lt;!-- nodemanager.aux-services.mapreduce.shuffle.class --&gt;</span>
+    <span class="xml-tag">&lt;name&gt;</span>yarn.nodemanager.aux-services.mapreduce.shuffle.class<span class="xml-tag">&lt;/name&gt;</span>
+    <span class="xml-tag">&lt;value&gt;</span><span class="xml-val">org.apache.hadoop.mapred.ShuffleHandler</span><span class="xml-tag">&lt;/value&gt;</span>
+  <span class="xml-tag">&lt;/property&gt;</span>
+<span class="xml-tag">&lt;/configuration&gt;</span></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Configurar archivo workers (solo en MASTER)</span>
+          </div>
+          <pre><span class="comment"># workers → lista de nodos que actuarán como DataNode y NodeManager</span>
+<span class="comment"># Hadoop inicia/detiene servicios en estos nodos remotamente via SSH</span>
+<span class="cmd">nano</span> /opt/hadoop/etc/hadoop/workers
+
+<span class="comment"># Contenido del archivo (eliminar "localhost" y poner:</span>
+<span class="value">worker1</span>
+<span class="value">worker2</span>
+<span class="value">worker3</span></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Copiar configs a todos los workers (desde MASTER)</span>
+          </div>
+          <pre><span class="comment"># scp → copia segura de archivos vía SSH</span>
+<span class="comment"># -r → recursivo (copia toda la carpeta)</span>
+<span class="comment"># Copiamos toda la configuración de hadoop a cada worker</span>
+<span class="cmd">scp</span> <span class="flag">-r</span> /opt/hadoop hadoop@worker1:/opt/
+<span class="cmd">scp</span> <span class="flag">-r</span> /opt/hadoop hadoop@worker2:/opt/
+<span class="cmd">scp</span> <span class="flag">-r</span> /opt/hadoop hadoop@worker3:/opt/</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" id="hadoop-start">
+      <div class="step-header">
+        <div class="step-num">08</div>
+        <div class="step-title">Formatear NameNode e Iniciar Hadoop</div>
+        <span class="step-badge-type type-run">EJECUCIÓN</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">El formateo del NameNode inicializa el sistema de archivos HDFS. Solo se hace UNA VEZ. Luego iniciamos los servicios HDFS y YARN.</p>
+
+        <div class="info-box ib-warn">
+          <span class="icon">⚠</span>
+          <div><strong>¡IMPORTANTE!</strong> El formateo del NameNode solo se ejecuta la primera vez. Si lo vuelves a ejecutar perderás todos los datos en HDFS.</div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Solo en MASTER</span>
+          </div>
+          <pre><span class="comment"># Crear los directorios de datos HDFS (en TODOS los nodos)</span>
+<span class="comment"># mkdir -p → crea directorios incluyendo los padres si no existen</span>
+<span class="cmd">mkdir</span> <span class="flag">-p</span> /home/hadoop/hdfs/namenode  <span class="comment"># Solo en MASTER</span>
+<span class="cmd">mkdir</span> <span class="flag">-p</span> /home/hadoop/hdfs/datanode   <span class="comment"># En workers también</span>
+<span class="cmd">mkdir</span> <span class="flag">-p</span> /home/hadoop/hadooptmpdata   <span class="comment"># En todos los nodos</span>
+
+<span class="comment"># FORMATEAR el NameNode (solo primera vez, solo en MASTER)</span>
+<span class="comment"># namenode -format → inicializa las estructuras del sistema de archivos HDFS</span>
+<span class="comment"># Responder "Y" cuando pregunte si deseas formatear</span>
+<span class="cmd">hdfs</span> namenode <span class="flag">-format</span>
+
+<span class="comment"># Iniciar el sistema de archivos distribuido HDFS</span>
+<span class="comment"># start-dfs.sh → arranca: NameNode (master) + DataNodes (workers) + SecondaryNameNode</span>
+<span class="cmd">start-dfs.sh</span>
+
+<span class="comment"># Iniciar YARN (gestor de recursos)</span>
+<span class="comment"># start-yarn.sh → arranca: ResourceManager (master) + NodeManagers (workers)</span>
+<span class="cmd">start-yarn.sh</span>
+
+<span class="comment"># Verificar los procesos corriendo con jps (Java Process Status)</span>
+<span class="comment"># jps → muestra todos los procesos Java en ejecución</span>
+<span class="comment"># En el MASTER deberías ver:</span>
+<span class="comment"># NameNode, SecondaryNameNode, ResourceManager</span>
+<span class="cmd">jps</span>
+
+<span class="comment"># Verificar en un worker (también con jps):</span>
+<span class="comment"># En cada WORKER deberías ver:</span>
+<span class="comment"># DataNode, NodeManager</span>
+<span class="cmd">ssh</span> worker1 <span class="value">"jps"</span></pre>
+        </div>
+
+        <div class="info-box ib-info">
+          <span class="icon">ℹ</span>
+          <div>
+            <strong>Interfaces web de Hadoop:</strong><br>
+            • <code>http://master:9870</code> → HDFS NameNode (ver archivos, nodos, estado)<br>
+            • <code>http://master:8088</code> → YARN ResourceManager (ver jobs, recursos)
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════ FASE 3: SPARK ════════ -->
+    <div class="phase" id="spark-install">
+      <div class="phase-tag">// FASE 03</div>
+      <h2>Instalación y Configuración de Apache Spark</h2>
+      <p>Instalamos Spark 3.5.1 en modo Standalone sobre el clúster Hadoop existente.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">09</div>
+        <div class="step-title">Descargar e instalar Apache Spark 3.5.1</div>
+        <span class="step-badge-type type-install">INSTALACIÓN</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Descargamos Spark precompilado para Hadoop 3.x. Se instala en TODOS los nodos.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — En TODOS los nodos</span>
+          </div>
+          <pre><span class="cmd">cd</span> /tmp
+
+<span class="comment"># Descargar Spark 3.5.1 precompilado para Hadoop 3</span>
+<span class="cmd">wget</span> https://downloads.apache.org/spark/spark-3.5.1/spark-3.5.1-bin-hadoop3.tgz
+
+<span class="comment"># Extraer el archivo</span>
+<span class="cmd">tar</span> <span class="flag">-xzf</span> spark-3.5.1-bin-hadoop3.tgz
+
+<span class="comment"># Mover a /opt/spark</span>
+<span class="cmd">sudo</span> mv spark-3.5.1-bin-hadoop3 /opt/spark
+
+<span class="comment"># Dar propiedad al usuario hadoop</span>
+<span class="cmd">sudo</span> chown <span class="flag">-R</span> hadoop:hadoop /opt/spark</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" id="spark-config">
+      <div class="step-header">
+        <div class="step-num">10</div>
+        <div class="step-title">Configurar Spark (workers y spark-env.sh)</div>
+        <span class="step-badge-type type-config">CONFIGURACIÓN</span>
+      </div>
+      <div class="step-body">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Solo en MASTER</span>
+          </div>
+          <pre><span class="comment"># Copiar la plantilla de configuración de entorno</span>
+<span class="cmd">cp</span> /opt/spark/conf/spark-env.sh.template /opt/spark/conf/spark-env.sh
+<span class="cmd">nano</span> /opt/spark/conf/spark-env.sh
+
+<span class="comment"># Agregar al final del archivo:</span>
+<span class="comment"># SPARK_MASTER_HOST → IP o hostname del nodo master</span>
+<span class="value">export SPARK_MASTER_HOST=master</span>
+
+<span class="comment"># SPARK_MASTER_PORT → puerto de comunicación del Spark Master</span>
+<span class="value">export SPARK_MASTER_PORT=7077</span>
+
+<span class="comment"># JAVA_HOME → le dice a Spark dónde está Java</span>
+<span class="value">export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64</span>
+
+<span class="comment"># HADOOP_CONF_DIR → para que Spark pueda leer archivos de HDFS</span>
+<span class="value">export HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop</span>
+
+<span class="comment"># SPARK_WORKER_MEMORY → cuánta RAM asigna cada worker a Spark</span>
+<span class="value">export SPARK_WORKER_MEMORY=2g</span>
+
+<span class="comment"># SPARK_WORKER_CORES → cuántos núcleos usa cada worker</span>
+<span class="value">export SPARK_WORKER_CORES=2</span></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Configurar lista de workers Spark</span>
+          </div>
+          <pre><span class="comment"># Copiar la plantilla de workers</span>
+<span class="cmd">cp</span> /opt/spark/conf/workers.template /opt/spark/conf/workers
+<span class="cmd">nano</span> /opt/spark/conf/workers
+
+<span class="comment"># Contenido (reemplazar "localhost" con los workers reales):</span>
+<span class="value">worker1</span>
+<span class="value">worker2</span>
+<span class="value">worker3</span>
+
+<span class="comment"># Copiar la configuración de Spark a los workers</span>
+<span class="cmd">scp</span> <span class="flag">-r</span> /opt/spark hadoop@worker1:/opt/
+<span class="cmd">scp</span> <span class="flag">-r</span> /opt/spark hadoop@worker2:/opt/
+<span class="cmd">scp</span> <span class="flag">-r</span> /opt/spark hadoop@worker3:/opt/</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" id="spark-start">
+      <div class="step-header">
+        <div class="step-num">11</div>
+        <div class="step-title">Iniciar el clúster Spark y verificar</div>
+        <span class="step-badge-type type-run">EJECUCIÓN</span>
+      </div>
+      <div class="step-body">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Solo en MASTER</span>
+          </div>
+          <pre><span class="comment"># Iniciar el nodo Master de Spark</span>
+<span class="comment"># start-master.sh → arranca el Spark Master en el nodo actual</span>
+<span class="comment"># El Master coordina la asignación de trabajos a los Workers</span>
+<span class="cmd">$SPARK_HOME/sbin/start-master.sh</span>
+
+<span class="comment"># Iniciar los Workers de Spark (en todos los workers vía SSH)</span>
+<span class="comment"># start-workers.sh → arranca los Spark Workers en todos los nodos listados en conf/workers</span>
+<span class="cmd">$SPARK_HOME/sbin/start-workers.sh</span>
+
+<span class="comment"># Verificar procesos en el master</span>
+<span class="comment"># Deberías ver: NameNode, ResourceManager, SecondaryNameNode, Master (Spark)</span>
+<span class="cmd">jps</span>
+
+<span class="comment"># Verificar proceso en workers</span>
+<span class="comment"># Deberías ver: DataNode, NodeManager, Worker (Spark)</span>
+<span class="cmd">ssh</span> worker1 <span class="value">"jps"</span></pre>
+        </div>
+
+        <div class="info-box ib-info">
+          <span class="icon">ℹ</span>
+          <div>
+            <strong>Interfaces web de Spark:</strong><br>
+            • <code>http://master:8080</code> → Spark Master UI (estado del clúster, workers conectados)<br>
+            • <code>http://master:4040</code> → Spark Application UI (jobs, stages, tareas — solo cuando hay una app activa)
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════ FASE 4: DATASET ════════ -->
+    <div class="phase" id="dataset">
+      <div class="phase-tag">// FASE 04</div>
+      <h2>Carga del Dataset y Pipeline PySpark</h2>
+      <p>Subimos el dataset de ventas a HDFS y lo procesamos con PySpark para generar el CSV de KPIs.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">12</div>
+        <div class="step-title">Subir el Dataset a HDFS</div>
+        <span class="step-badge-type type-run">EJECUCIÓN</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Creamos la estructura de directorios en HDFS y subimos el archivo CSV con los 120,000 registros de ventas de RetailMax.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — En MASTER</span>
+          </div>
+          <pre><span class="comment"># Verificar que HDFS está activo</span>
+<span class="comment"># hdfs dfs → comandos de sistema de archivos distribuido</span>
+<span class="comment"># -ls / → listar el directorio raíz de HDFS</span>
+<span class="cmd">hdfs</span> dfs <span class="flag">-ls</span> /
+
+<span class="comment"># Crear el directorio del proyecto en HDFS</span>
+<span class="comment"># hdfs dfs -mkdir → crea un directorio en HDFS (no en el sistema local)</span>
+<span class="comment"># -p → crea directorios padres si no existen</span>
+<span class="cmd">hdfs</span> dfs <span class="flag">-mkdir</span> <span class="flag">-p</span> /retail_project
+
+<span class="comment"># Asegurarse de que el CSV está en el sistema local del master</span>
+<span class="comment"># (el archivo debió copiarse previamente al master)</span>
+<span class="cmd">ls</span> <span class="flag">-la</span> ~/retail_sales_dataset.csv
+
+<span class="comment"># Subir el dataset a HDFS</span>
+<span class="comment"># hdfs dfs -put → copia un archivo del sistema LOCAL al sistema HDFS</span>
+<span class="comment"># ~/retail_sales_dataset.csv → ruta local del archivo</span>
+<span class="comment"># /retail_project/ → destino en HDFS</span>
+<span class="cmd">hdfs</span> dfs <span class="flag">-put</span> ~/retail_sales_dataset.csv /retail_project/
+
+<span class="comment"># Verificar que el archivo llegó bien a HDFS</span>
+<span class="cmd">hdfs</span> dfs <span class="flag">-ls</span> /retail_project/
+
+<span class="comment"># Ver las primeras líneas del archivo en HDFS</span>
+<span class="comment"># hdfs dfs -head → muestra las primeras líneas (como head en Linux)</span>
+<span class="cmd">hdfs</span> dfs <span class="flag">-head</span> /retail_project/retail_sales_dataset.csv</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" id="pipeline">
+      <div class="step-header">
+        <div class="step-num">13</div>
+        <div class="step-title">Conectar PySpark y procesar el Dataset</div>
+        <span class="step-badge-type type-run">EJECUCIÓN</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Abrimos PySpark apuntando al master del clúster Spark y ejecutamos las transformaciones para calcular los KPIs.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — En MASTER: iniciar PySpark</span>
+          </div>
+          <pre><span class="comment"># Iniciar PySpark apuntando al Spark Master</span>
+<span class="comment"># pyspark → shell interactivo de Python con Spark</span>
+<span class="comment"># --master spark://master:7077 → conectar al Spark Master del clúster</span>
+<span class="comment"># Esto distribuye el procesamiento entre los 3 workers</span>
+<span class="cmd">/opt/spark/bin/pyspark</span> <span class="flag">--master</span> spark://master:7077</pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">Python — Comandos en el shell PySpark (>>>)</span>
+          </div>
+          <pre><span class="py-cmt"># Leer el CSV desde HDFS</span>
+<span class="py-cmt"># spark.read.csv() → lector de CSV del SparkSession</span>
+<span class="py-cmt"># header=True → la primera fila son nombres de columnas</span>
+<span class="py-cmt"># inferSchema=True → Spark deduce el tipo de dato de cada columna</span>
+df = spark.read.csv(
+    <span class="py-str">"hdfs://master:9000/retail_project/retail_sales_dataset.csv"</span>,
+    header=<span class="py-kw">True</span>,
+    inferSchema=<span class="py-kw">True</span>
+)
+
+<span class="py-cmt"># Contar los registros → debe dar 120,000</span>
+df.count()
+
+<span class="py-cmt"># Ver el esquema del DataFrame (columnas y tipos de datos)</span>
+df.printSchema()
+
+<span class="py-cmt"># Ver las primeras 5 filas</span>
+df.show(5)
+
+<span class="py-cmt"># Repartir el DataFrame en 7 particiones para mejor distribución</span>
+<span class="py-cmt"># repartition() → redistribuye los datos entre los executors</span>
+<span class="py-cmt"># 7 particiones → número óptimo para 3 workers con 2 cores cada uno</span>
+df = df.repartition(7)
+
+<span class="py-cmt"># Verificar las columnas disponibles</span>
+<span class="py-kw">print</span>(df.columns)</pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">Python — Pipeline ETL completo (guardar como pipeline.py)</span>
+          </div>
+          <pre><span class="py-cmt">#!/usr/bin/env python3</span>
+<span class="py-cmt"># pipeline.py — ETL para generar kpi_sales.csv desde HDFS</span>
+
+<span class="py-kw">from</span> pyspark.sql <span class="py-kw">import</span> SparkSession
+<span class="py-kw">from</span> pyspark.sql.functions <span class="py-kw">import</span> col, sum, avg, count, when, round
+
+<span class="py-cmt"># ── 1. Crear la sesión Spark ────────────────────────────────────</span>
+<span class="py-cmt"># SparkSession.builder → constructor de la sesión</span>
+<span class="py-cmt"># .master() → conectar al Spark Master del clúster</span>
+<span class="py-cmt"># .appName() → nombre identificador del job (visible en Spark UI)</span>
+spark = SparkSession.builder \
+    .<span class="py-fn">master</span>(<span class="py-str">"spark://master:7077"</span>) \
+    .<span class="py-fn">appName</span>(<span class="py-str">"RetailMax_ETL"</span>) \
+    .<span class="py-fn">getOrCreate</span>()
+
+<span class="py-cmt"># ── 2. Leer el dataset desde HDFS ──────────────────────────────</span>
+df = spark.read.csv(
+    <span class="py-str">"hdfs://master:9000/retail_project/retail_sales_dataset.csv"</span>,
+    header=<span class="py-kw">True</span>,
+    inferSchema=<span class="py-kw">True</span>
+)
+
+<span class="py-cmt"># ── 3. Limpiar y preparar datos ────────────────────────────────</span>
+<span class="py-cmt"># Seleccionar y renombrar columnas relevantes</span>
+<span class="py-cmt"># cast("double") → convertir a número decimal si viene como string</span>
+df_clean = df.select(
+    col(<span class="py-str">"transaction_id"</span>),
+    col(<span class="py-str">"date"</span>),
+    col(<span class="py-str">"product_name"</span>),
+    col(<span class="py-str">"category"</span>),
+    col(<span class="py-str">"region"</span>),
+    col(<span class="py-str">"sales_channel"</span>),
+    col(<span class="py-str">"customer_segment"</span>),
+    col(<span class="py-str">"customer_age_group"</span>),
+    col(<span class="py-str">"payment_method"</span>),
+    col(<span class="py-str">"sales_amount"</span>).<span class="py-fn">cast</span>(<span class="py-str">"double"</span>),
+    col(<span class="py-str">"discount_pct"</span>).<span class="py-fn">cast</span>(<span class="py-str">"double"</span>),
+    col(<span class="py-str">"units_sold"</span>).<span class="py-fn">cast</span>(<span class="py-str">"integer"</span>)
+).<span class="py-fn">dropna</span>()
+
+<span class="py-cmt"># ── 4. Distribuir en particiones ───────────────────────────────</span>
+<span class="py-cmt"># repartition() → redistribuye para procesamiento paralelo</span>
+df_clean = df_clean.<span class="py-fn">repartition</span>(7)
+
+<span class="py-cmt"># ── 5. Convertir a pandas para guardar como CSV local ──────────</span>
+<span class="py-cmt"># toPandas() → convierte el Spark DataFrame a pandas</span>
+<span class="py-cmt"># NOTA: solo es viable porque el resultado final es pequeño</span>
+df_pandas = df_clean.<span class="py-fn">toPandas</span>()
+
+<span class="py-cmt"># ── 6. Guardar en el sistema local del master ──────────────────</span>
+<span class="py-kw">import</span> os
+os.<span class="py-fn">makedirs</span>(<span class="py-str">"/home/hadoop/data"</span>, exist_ok=<span class="py-kw">True</span>)
+df_pandas.<span class="py-fn">to_csv</span>(<span class="py-str">"/home/hadoop/data/kpi_sales.csv"</span>, index=<span class="py-kw">False</span>)
+
+<span class="py-kw">print</span>(<span class="py-str">"✓ Pipeline completado: kpi_sales.csv generado"</span>)
+<span class="py-kw">print</span>(<span class="py-fn">f</span><span class="py-str">"  Registros: {len(df_pandas):,}"</span>)
+
+spark.<span class="py-fn">stop</span>()</pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Ejecutar el pipeline</span>
+          </div>
+          <pre><span class="comment"># spark-submit → envía un script Python al clúster Spark para ejecutarse</span>
+<span class="comment"># --master → clúster Spark al que conectar</span>
+<span class="comment"># pipeline.py → el script que procesará los datos</span>
+<span class="cmd">/opt/spark/bin/spark-submit</span> \
+  <span class="flag">--master</span> spark://master:7077 \
+  ~/pipeline.py</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" id="export">
+      <div class="step-header">
+        <div class="step-num">14</div>
+        <div class="step-title">Verificar el CSV generado</div>
+        <span class="step-badge-type type-verify">VERIFICACIÓN</span>
+      </div>
+      <div class="step-body">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Verificar el archivo de salida</span>
+          </div>
+          <pre><span class="comment"># Verificar que el archivo existe y su tamaño</span>
+<span class="cmd">ls</span> <span class="flag">-lh</span> ~/data/kpi_sales.csv
+
+<span class="comment"># Contar líneas (registros + 1 header)</span>
+<span class="comment"># wc -l → cuenta líneas del archivo</span>
+<span class="cmd">wc</span> <span class="flag">-l</span> ~/data/kpi_sales.csv
+
+<span class="comment"># Ver el encabezado (columnas disponibles)</span>
+<span class="comment"># head -1 → primera línea del archivo</span>
+<span class="cmd">head</span> <span class="flag">-1</span> ~/data/kpi_sales.csv
+
+<span class="comment"># Ver las primeras 3 filas de datos</span>
+<span class="cmd">head</span> <span class="flag">-4</span> ~/data/kpi_sales.csv</pre>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════ FASE 5: DASHBOARD ════════ -->
+    <div class="phase" id="streamlit-install">
+      <div class="phase-tag">// FASE 05</div>
+      <h2>Dashboard Ejecutivo con Streamlit</h2>
+      <p>Instalamos Streamlit en un entorno virtual y construimos el dashboard con los 10 KPIs del proyecto RetailMax.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">15</div>
+        <div class="step-title">Instalar Streamlit en entorno virtual</div>
+        <span class="step-badge-type type-install">INSTALACIÓN</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Usamos un entorno virtual Python para aislar las dependencias de Streamlit del sistema. <strong>Importante:</strong> Streamlit no necesita PySpark porque lee el CSV ya procesado, no HDFS directamente.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — En MASTER: crear entorno virtual e instalar librerías</span>
+          </div>
+          <pre><span class="comment"># Asegurarse de tener python3-venv disponible</span>
+<span class="cmd">sudo</span> apt install <span class="flag">-y</span> python3-venv python3-pip
+
+<span class="comment"># Crear el entorno virtual en ~/streamlit_env</span>
+<span class="comment"># python3 -m venv → crea un entorno Python aislado</span>
+<span class="comment"># streamlit_env → nombre del directorio del entorno</span>
+<span class="cmd">python3</span> <span class="flag">-m</span> venv ~/streamlit_env
+
+<span class="comment"># Activar el entorno virtual</span>
+<span class="comment"># source → ejecuta el script de activación en la sesión actual</span>
+<span class="comment"># El prompt cambiará a: (streamlit_env) hadoop@master:~$</span>
+<span class="cmd">source</span> ~/streamlit_env/bin/activate
+
+<span class="comment"># Instalar las dependencias del dashboard</span>
+<span class="comment"># streamlit → el framework de dashboard</span>
+<span class="comment"># pandas → manipulación de datos (lee el CSV)</span>
+<span class="comment"># plotly → librería de gráficos interactivos</span>
+<span class="cmd">pip</span> install streamlit pandas plotly
+
+<span class="comment"># Verificar instalaciones</span>
+<span class="comment"># --version → muestra la versión instalada</span>
+<span class="cmd">streamlit</span> <span class="flag">--version</span>
+<span class="cmd">python3</span> <span class="flag">-c</span> <span class="value">"import pandas; print(pandas.__version__)"</span>
+<span class="cmd">python3</span> <span class="flag">-c</span> <span class="value">"import plotly; print(plotly.__version__)"</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" id="app-code">
+      <div class="step-header">
+        <div class="step-num">16</div>
+        <div class="step-title">Código completo del Dashboard (app.py)</div>
+        <span class="step-badge-type type-code">CÓDIGO</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Este es el archivo <code>~/app.py</code> completo con los 10 KPIs, gráficos mixtos (barras, líneas, pie, área) y layout en columnas estilo BI ejecutivo.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">Python — /home/hadoop/app.py (completo)</span>
+          </div>
+          <pre><span class="py-cmt">#!/usr/bin/env python3</span>
+<span class="py-cmt"># app.py — Dashboard Ejecutivo RetailMax</span>
+<span class="py-cmt"># Requiere: streamlit, pandas, plotly</span>
+
+<span class="py-kw">import</span> streamlit <span class="py-kw">as</span> st
+<span class="py-kw">import</span> pandas <span class="py-kw">as</span> pd
+<span class="py-kw">import</span> plotly.express <span class="py-kw">as</span> px
+<span class="py-kw">import</span> plotly.graph_objects <span class="py-kw">as</span> go
+
+<span class="py-cmt"># ── CONFIG DE PÁGINA ────────────────────────────────────────────</span>
+<span class="py-cmt"># set_page_config → configura la página antes de cualquier elemento</span>
+<span class="py-cmt"># page_title → título en la pestaña del navegador</span>
+<span class="py-cmt"># layout="wide" → usa todo el ancho disponible (mejor para dashboards)</span>
+<span class="py-cmt"># page_icon → emoji o ruta a ícono</span>
+st.<span class="py-fn">set_page_config</span>(
+    page_title=<span class="py-str">"RetailMax Dashboard"</span>,
+    layout=<span class="py-str">"wide"</span>,
+    page_icon=<span class="py-str">"📊"</span>
+)
+
+<span class="py-cmt"># ── ESTILOS GLOBALES PARA PLOTLY ────────────────────────────────</span>
+<span class="py-cmt"># Configuración base de layout para todos los gráficos</span>
+<span class="py-cmt"># font color="black" → texto negro visible sobre fondo blanco</span>
+PLOTLY_LAYOUT = {
+    <span class="py-str">"font"</span>: dict(color=<span class="py-str">"black"</span>, size=12),
+    <span class="py-str">"xaxis"</span>: dict(
+        tickfont=dict(color=<span class="py-str">"black"</span>, size=11),
+        titlefont=dict(color=<span class="py-str">"black"</span>, size=12)
+    ),
+    <span class="py-str">"yaxis"</span>: dict(
+        tickfont=dict(color=<span class="py-str">"black"</span>, size=11),
+        titlefont=dict(color=<span class="py-str">"black"</span>, size=12)
+    ),
+    <span class="py-str">"plot_bgcolor"</span>: <span class="py-str">"white"</span>,
+    <span class="py-str">"paper_bgcolor"</span>: <span class="py-str">"white"</span>,
+    <span class="py-str">"legend"</span>: dict(font=dict(color=<span class="py-str">"black"</span>))
+}
+
+<span class="py-cmt"># ── TÍTULO ──────────────────────────────────────────────────────</span>
+st.<span class="py-fn">title</span>(<span class="py-str">"📊 RetailMax — Executive Analytics Dashboard"</span>)
+st.<span class="py-fn">markdown</span>(<span class="py-str">"**Dataset:** 120,000 transacciones | **Procesado con:** Apache Spark 3.5.1"</span>)
+
+<span class="py-cmt"># ── CARGAR DATOS ────────────────────────────────────────────────</span>
+<span class="py-cmt"># @st.cache_data → cachea los datos en memoria para no releer el CSV en cada interacción</span>
+<span class="py-cmt"># La función solo se ejecuta la primera vez o cuando cambia el archivo</span>
+@st.<span class="py-fn">cache_data</span>
+<span class="py-kw">def</span> <span class="py-fn">load_data</span>():
+    df = pd.<span class="py-fn">read_csv</span>(<span class="py-str">"/home/hadoop/data/kpi_sales.csv"</span>)
+    <span class="py-cmt"># Convertir columnas numéricas (por si vienen como string)</span>
+    df[<span class="py-str">"sales_amount"</span>] = pd.<span class="py-fn">to_numeric</span>(df[<span class="py-str">"sales_amount"</span>], errors=<span class="py-str">"coerce"</span>)
+    df[<span class="py-str">"discount_pct"</span>] = pd.<span class="py-fn">to_numeric</span>(df[<span class="py-str">"discount_pct"</span>], errors=<span class="py-str">"coerce"</span>)
+    df[<span class="py-str">"units_sold"</span>]   = pd.<span class="py-fn">to_numeric</span>(df[<span class="py-str">"units_sold"</span>],   errors=<span class="py-str">"coerce"</span>)
+    <span class="py-kw">return</span> df
+
+df = <span class="py-fn">load_data</span>()
+
+st.<span class="py-fn">divider</span>()
+
+<span class="py-cmt"># ════════════════════════════════════════════════════════════════</span>
+<span class="py-cmt"># SECCIÓN 1: KPIs PRINCIPALES (FILA DE MÉTRICAS)</span>
+<span class="py-cmt"># st.metric() → tarjeta KPI con valor y delta (variación)</span>
+<span class="py-cmt"># ════════════════════════════════════════════════════════════════</span>
+st.<span class="py-fn">subheader</span>(<span class="py-str">"📈 KPIs Principales"</span>)
+
+k1, k2, k3, k4, k5 = st.<span class="py-fn">columns</span>(5)
+
+<span class="py-cmt"># KPI 1: Ventas Totales</span>
+k1.<span class="py-fn">metric</span>(<span class="py-str">"💰 Ventas Totales"</span>, <span class="py-fn">f</span><span class="py-str">"S/ {df['sales_amount'].sum():,.0f}"</span>)
+
+<span class="py-cmt"># KPI 2: Ticket Promedio (valor medio por transacción)</span>
+k2.<span class="py-fn">metric</span>(<span class="py-str">"🧾 Ticket Promedio"</span>, <span class="py-fn">f</span><span class="py-str">"S/ {df['sales_amount'].mean():,.2f}"</span>)
+
+<span class="py-cmt"># KPI 3: Total Transacciones</span>
+k3.<span class="py-fn">metric</span>(<span class="py-str">"🔢 Transacciones"</span>, <span class="py-fn">f</span><span class="py-str">"{len(df):,}"</span>)
+
+<span class="py-cmt"># KPI 4: Descuento Promedio</span>
+k4.<span class="py-fn">metric</span>(<span class="py-str">"🏷️ Descuento Prom."</span>, <span class="py-fn">f</span><span class="py-str">"{df['discount_pct'].mean():.1f}%"</span>)
+
+<span class="py-cmt"># KPI 5: Total Unidades Vendidas</span>
+k5.<span class="py-fn">metric</span>(<span class="py-str">"📦 Unidades Vendidas"</span>, <span class="py-fn">f</span><span class="py-str">"{int(df['units_sold'].sum()):,}"</span>)
+
+st.<span class="py-fn">divider</span>()
+
+<span class="py-cmt"># ════════════════════════════════════════════════════════════════</span>
+<span class="py-cmt"># SECCIÓN 2: GRÁFICOS DE VENTAS (FILA 1)</span>
+<span class="py-cmt"># ════════════════════════════════════════════════════════════════</span>
+c1, c2 = st.<span class="py-fn">columns</span>(2)
+
+<span class="py-cmt"># KPI 6: Ventas por Categoría — Gráfico de Barras</span>
+<span class="py-kw">with</span> c1:
+    st.<span class="py-fn">subheader</span>(<span class="py-str">"📦 KPI 6: Ventas por Categoría"</span>)
+    cat = df.<span class="py-fn">groupby</span>(<span class="py-str">"category"</span>)[<span class="py-str">"sales_amount"</span>].<span class="py-fn">sum</span>().<span class="py-fn">reset_index</span>()
+    fig = px.<span class="py-fn">bar</span>(cat, x=<span class="py-str">"category"</span>, y=<span class="py-str">"sales_amount"</span>,
+                color=<span class="py-str">"category"</span>, title=<span class="py-str">"Ventas Totales por Categoría"</span>)
+    fig.<span class="py-fn">update_layout</span>(**PLOTLY_LAYOUT)
+    st.<span class="py-fn">plotly_chart</span>(fig, use_container_width=<span class="py-kw">True</span>)
+
+<span class="py-cmt"># KPI 7: Ventas por Región — Gráfico de Líneas</span>
+<span class="py-kw">with</span> c2:
+    st.<span class="py-fn">subheader</span>(<span class="py-str">"📍 KPI 7: Ventas por Región"</span>)
+    reg = df.<span class="py-fn">groupby</span>(<span class="py-str">"region"</span>)[<span class="py-str">"sales_amount"</span>].<span class="py-fn">sum</span>().<span class="py-fn">reset_index</span>()
+    fig2 = px.<span class="py-fn">line</span>(reg, x=<span class="py-str">"region"</span>, y=<span class="py-str">"sales_amount"</span>,
+                  markers=<span class="py-kw">True</span>, title=<span class="py-str">"Ventas por Región"</span>)
+    fig2.<span class="py-fn">update_layout</span>(**PLOTLY_LAYOUT)
+    st.<span class="py-fn">plotly_chart</span>(fig2, use_container_width=<span class="py-kw">True</span>)
+
+<span class="py-cmt"># ════════════════════════════════════════════════════════════════</span>
+<span class="py-cmt"># SECCIÓN 3: GRÁFICOS DE CANAL Y SEGMENTO (FILA 2)</span>
+<span class="py-cmt"># ════════════════════════════════════════════════════════════════</span>
+c3, c4 = st.<span class="py-fn">columns</span>(2)
+
+<span class="py-cmt"># KPI 8: Ventas por Canal — Pie Chart</span>
+<span class="py-kw">with</span> c3:
+    st.<span class="py-fn">subheader</span>(<span class="py-str">"🛒 KPI 8: Ventas por Canal"</span>)
+    ch = df.<span class="py-fn">groupby</span>(<span class="py-str">"sales_channel"</span>)[<span class="py-str">"sales_amount"</span>].<span class="py-fn">sum</span>().<span class="py-fn">reset_index</span>()
+    fig3 = px.<span class="py-fn">pie</span>(ch, names=<span class="py-str">"sales_channel"</span>, values=<span class="py-str">"sales_amount"</span>,
+                  title=<span class="py-str">"Distribución de Ventas por Canal"</span>)
+    fig3.<span class="py-fn">update_layout</span>(**PLOTLY_LAYOUT)
+    st.<span class="py-fn">plotly_chart</span>(fig3, use_container_width=<span class="py-kw">True</span>)
+
+<span class="py-cmt"># KPI 9: Segmento de Cliente — Barras horizontales</span>
+<span class="py-kw">with</span> c4:
+    st.<span class="py-fn">subheader</span>(<span class="py-str">"👥 KPI 9: Segmento de Cliente"</span>)
+    seg = df.<span class="py-fn">groupby</span>(<span class="py-str">"customer_segment"</span>)[<span class="py-str">"sales_amount"</span>].<span class="py-fn">sum</span>().<span class="py-fn">reset_index</span>()
+    fig4 = px.<span class="py-fn">bar</span>(seg, x=<span class="py-str">"sales_amount"</span>, y=<span class="py-str">"customer_segment"</span>,
+                orientation=<span class="py-str">"h"</span>, title=<span class="py-str">"Ventas por Segmento de Cliente"</span>,
+                color=<span class="py-str">"customer_segment"</span>)
+    fig4.<span class="py-fn">update_layout</span>(**PLOTLY_LAYOUT)
+    st.<span class="py-fn">plotly_chart</span>(fig4, use_container_width=<span class="py-kw">True</span>)
+
+st.<span class="py-fn">divider</span>()
+
+<span class="py-cmt"># ════════════════════════════════════════════════════════════════</span>
+<span class="py-cmt"># SECCIÓN 4: TOP PRODUCTOS</span>
+<span class="py-cmt"># ════════════════════════════════════════════════════════════════</span>
+st.<span class="py-fn">subheader</span>(<span class="py-str">"🏆 KPI 10: Top 10 Productos por Ventas"</span>)
+top10 = (df.<span class="py-fn">groupby</span>(<span class="py-str">"product_name"</span>)[<span class="py-str">"sales_amount"</span>]
+            .<span class="py-fn">sum</span>()
+            .<span class="py-fn">sort_values</span>(ascending=<span class="py-kw">False</span>)
+            .head(10)
+            .<span class="py-fn">reset_index</span>())
+
+fig5 = px.<span class="py-fn">bar</span>(top10, x=<span class="py-str">"sales_amount"</span>, y=<span class="py-str">"product_name"</span>,
+             orientation=<span class="py-str">"h"</span>, title=<span class="py-str">"Top 10 Productos"</span>,
+             color=<span class="py-str">"sales_amount"</span>, color_continuous_scale=<span class="py-str">"Greens"</span>)
+fig5.<span class="py-fn">update_layout</span>(**PLOTLY_LAYOUT)
+st.<span class="py-fn">plotly_chart</span>(fig5, use_container_width=<span class="py-kw">True</span>)
+
+st.<span class="py-fn">divider</span>()
+
+<span class="py-cmt"># ════════════════════════════════════════════════════════════════</span>
+<span class="py-cmt"># SECCIÓN 5: ANÁLISIS ADICIONAL</span>
+<span class="py-cmt"># ════════════════════════════════════════════════════════════════</span>
+c5, c6 = st.<span class="py-fn">columns</span>(2)
+
+<span class="py-kw">with</span> c5:
+    st.<span class="py-fn">subheader</span>(<span class="py-str">"💳 Métodos de Pago"</span>)
+    pay = df.<span class="py-fn">groupby</span>(<span class="py-str">"payment_method"</span>)[<span class="py-str">"sales_amount"</span>].<span class="py-fn">sum</span>().<span class="py-fn">reset_index</span>()
+    fig6 = px.<span class="py-fn">pie</span>(pay, names=<span class="py-str">"payment_method"</span>, values=<span class="py-str">"sales_amount"</span>,
+                  hole=<span class="py-str">0.4</span>, title=<span class="py-str">"Distribución por Método de Pago"</span>)
+    fig6.<span class="py-fn">update_layout</span>(**PLOTLY_LAYOUT)
+    st.<span class="py-fn">plotly_chart</span>(fig6, use_container_width=<span class="py-kw">True</span>)
+
+<span class="py-kw">with</span> c6:
+    st.<span class="py-fn">subheader</span>(<span class="py-str">"🎂 Ventas por Grupo de Edad"</span>)
+    age = df.<span class="py-fn">groupby</span>(<span class="py-str">"customer_age_group"</span>)[<span class="py-str">"sales_amount"</span>].<span class="py-fn">sum</span>().<span class="py-fn">reset_index</span>()
+    fig7 = px.<span class="py-fn">area</span>(age, x=<span class="py-str">"customer_age_group"</span>, y=<span class="py-str">"sales_amount"</span>,
+                   title=<span class="py-str">"Ventas por Grupo de Edad"</span>)
+    fig7.<span class="py-fn">update_layout</span>(**PLOTLY_LAYOUT)
+    st.<span class="py-fn">plotly_chart</span>(fig7, use_container_width=<span class="py-kw">True</span>)
+
+<span class="py-cmt"># ────────────────────────────────────────────────────────────────</span>
+<span class="py-cmt"># TABLA PIVOT: Descuento por Categoría y Canal</span>
+<span class="py-cmt"># ────────────────────────────────────────────────────────────────</span>
+st.<span class="py-fn">subheader</span>(<span class="py-str">"📊 Descuento Promedio por Categoría y Canal"</span>)
+pivot = df.<span class="py-fn">pivot_table</span>(
+    index=<span class="py-str">"category"</span>,
+    columns=<span class="py-str">"sales_channel"</span>,
+    values=<span class="py-str">"discount_pct"</span>,
+    aggfunc=<span class="py-str">"mean"</span>
+)
+<span class="py-cmt"># st.dataframe() → muestra una tabla interactiva con scroll y ordenamiento</span>
+st.<span class="py-fn">dataframe</span>(pivot.<span class="py-fn">style</span>.<span class="py-fn">format</span>(<span class="py-str">"{:.2f}%"</span>), use_container_width=<span class="py-kw">True</span>)</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════ KPIs ════════ -->
+    <div class="phase" id="kpis">
+      <div class="phase-tag">// SECCIÓN 17</div>
+      <h2>Los 10 KPIs del Proyecto</h2>
+      <p>Descripción de cada indicador clave de rendimiento definido para RetailMax.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">17</div>
+        <div class="step-title">Definición y fórmula de los 10 KPIs</div>
+        <span class="step-badge-type type-verify">REFERENCIA</span>
+      </div>
+      <div class="step-body">
+        <table class="kpi-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>KPI</th>
+              <th>Fórmula / Agrupación</th>
+              <th>Visualización</th>
+              <th>Pregunta de negocio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="kpi-num">KPI 1</td>
+              <td class="kpi-name">Ventas Totales</td>
+              <td><code>SUM(sales_amount)</code></td>
+              <td>Tarjeta KPI</td>
+              <td>¿Cuánto ingresa en total?</td>
+            </tr>
+            <tr>
+              <td class="kpi-num">KPI 2</td>
+              <td class="kpi-name">Ticket Promedio</td>
+              <td><code>AVG(sales_amount)</code></td>
+              <td>Tarjeta KPI</td>
+              <td>¿Cuánto gasta en promedio un cliente?</td>
+            </tr>
+            <tr>
+              <td class="kpi-num">KPI 3</td>
+              <td class="kpi-name">Total Transacciones</td>
+              <td><code>COUNT(transaction_id)</code></td>
+              <td>Tarjeta KPI</td>
+              <td>¿Cuántas ventas se realizaron?</td>
+            </tr>
+            <tr>
+              <td class="kpi-num">KPI 4</td>
+              <td class="kpi-name">Descuento Promedio</td>
+              <td><code>AVG(discount_pct)</code></td>
+              <td>Tarjeta KPI</td>
+              <td>¿Qué tan agresivos son los descuentos?</td>
+            </tr>
+            <tr>
+              <td class="kpi-num">KPI 5</td>
+              <td class="kpi-name">Unidades Vendidas</td>
+              <td><code>SUM(units_sold)</code></td>
+              <td>Tarjeta KPI</td>
+              <td>¿Cuántos productos se despacharon?</td>
+            </tr>
+            <tr>
+              <td class="kpi-num">KPI 6</td>
+              <td class="kpi-name">Ventas por Categoría</td>
+              <td><code>SUM(sales_amount) GROUP BY category</code></td>
+              <td>Barras verticales</td>
+              <td>¿Qué categoría genera más ingresos?</td>
+            </tr>
+            <tr>
+              <td class="kpi-num">KPI 7</td>
+              <td class="kpi-name">Ventas por Región</td>
+              <td><code>SUM(sales_amount) GROUP BY region</code></td>
+              <td>Gráfico de líneas</td>
+              <td>¿Qué región es más rentable?</td>
+            </tr>
+            <tr>
+              <td class="kpi-num">KPI 8</td>
+              <td class="kpi-name">Ventas por Canal</td>
+              <td><code>SUM(sales_amount) GROUP BY sales_channel</code></td>
+              <td>Pie chart</td>
+              <td>¿Online o físico vende más?</td>
+            </tr>
+            <tr>
+              <td class="kpi-num">KPI 9</td>
+              <td class="kpi-name">Ventas por Segmento</td>
+              <td><code>SUM(sales_amount) GROUP BY customer_segment</code></td>
+              <td>Barras horizontales</td>
+              <td>¿Qué segmento de cliente compra más?</td>
+            </tr>
+            <tr>
+              <td class="kpi-num">KPI 10</td>
+              <td class="kpi-name">Top 10 Productos</td>
+              <td><code>SUM(sales_amount) GROUP BY product_name ORDER BY DESC LIMIT 10</code></td>
+              <td>Barras horizontales</td>
+              <td>¿Cuáles son los productos estrella?</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════════ EJECUTAR DASHBOARD ════════ -->
+    <div class="step" id="run">
+      <div class="step-header">
+        <div class="step-num">18</div>
+        <div class="step-title">Ejecutar el Dashboard Streamlit</div>
+        <span class="step-badge-type type-run">EJECUCIÓN</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Activamos el entorno virtual y lanzamos la aplicación. Streamlit crea un servidor web accesible desde cualquier navegador en la red.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Ejecutar dashboard</span>
+          </div>
+          <pre><span class="comment"># Activar el entorno virtual (SIEMPRE antes de ejecutar)</span>
+<span class="cmd">source</span> ~/streamlit_env/bin/activate
+
+<span class="comment"># Lanzar el dashboard</span>
+<span class="comment"># streamlit run → inicia el servidor web de Streamlit</span>
+<span class="comment"># app.py → el archivo de la aplicación</span>
+<span class="cmd">streamlit</span> run ~/app.py
+
+<span class="comment"># Streamlit mostrará las URLs de acceso:</span>
+<span class="comment"># Local URL:    http://localhost:8501  (en el mismo master)</span>
+<span class="comment"># Network URL:  http://192.168.x.x:8501  (desde la red local)</span>
+<span class="comment"># External URL: http://xxx.xxx.xxx.xxx:8501  (desde internet)</span></pre>
+        </div>
+
+        <div class="info-box ib-ok">
+          <span class="icon">✓</span>
+          <div>Abrir el navegador en <strong>http://[IP del master]:8501</strong> para ver el dashboard. El puerto 8501 debe estar abierto en el firewall del servidor.</div>
+        </div>
+
+        <div class="pipeline">
+          <div class="pipe-node active">Dataset HDFS</div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-node active">PySpark ETL</div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-node active">kpi_sales.csv</div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-node active">Streamlit</div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-node active">Dashboard :8501</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════ ERRORES COMUNES ════════ -->
+    <div class="phase" id="errors">
+      <div class="phase-tag">// SOLUCIÓN DE PROBLEMAS</div>
+      <h2>Errores Comunes y Cómo Resolverlos</h2>
+      <p>Todos los errores que surgieron durante el desarrollo del proyecto y su solución exacta.</p>
+    </div>
+
+    <div class="error-card">
+      <div class="error-card-header">⚠ ERROR 01 — ModuleNotFoundError: pyspark</div>
+      <div class="error-card-body">
+        <div class="error-msg">ModuleNotFoundError: No module named 'pyspark'</div>
+        <div class="error-sol-title">✓ Causa</div>
+        <div class="error-sol-desc">El archivo <code>app.py</code> tenía <code>from pyspark.sql import SparkSession</code> dentro del entorno virtual de Streamlit, que no tiene PySpark instalado.</div>
+        <div class="error-sol-title">✓ Solución</div>
+        <div class="error-sol-desc">Streamlit NO debe usar PySpark directamente. El pipeline de Spark genera <code>kpi_sales.csv</code> y Streamlit lo lee con pandas. Eliminar cualquier <code>import pyspark</code> del app.py.</div>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">Python — CORRECTO en app.py</span>
+          </div>
+          <pre><span class="py-cmt"># ✓ CORRECTO: solo pandas para leer el CSV</span>
+<span class="py-kw">import</span> pandas <span class="py-kw">as</span> pd
+df = pd.<span class="py-fn">read_csv</span>(<span class="py-str">"/home/hadoop/data/kpi_sales.csv"</span>)
+
+<span class="py-cmt"># ✗ INCORRECTO: no poner esto en app.py</span>
+<span class="py-cmt"># from pyspark.sql import SparkSession</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-card-header">⚠ ERROR 02 — Workers DEAD en Spark UI</div>
+      <div class="error-card-body">
+        <div class="error-msg">DEAD worker1, worker2, worker3 — Status: DEAD</div>
+        <div class="error-sol-title">✓ Causa</div>
+        <div class="error-sol-desc">Los workers de Spark se cayeron por inactividad, falta de memoria o timeout de heartbeat.</div>
+        <div class="error-sol-title">✓ Solución</div>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Reiniciar workers Spark</span>
+          </div>
+          <pre><span class="comment"># Detener todos los workers</span>
+<span class="cmd">$SPARK_HOME/sbin/stop-workers.sh</span>
+
+<span class="comment"># Reiniciar workers</span>
+<span class="cmd">$SPARK_HOME/sbin/start-workers.sh</span>
+
+<span class="comment"># Verificar en http://master:8080 que aparezcan como ALIVE</span>
+<span class="comment"># Si persiste, reiniciar todo el clúster Spark:</span>
+<span class="cmd">$SPARK_HOME/sbin/stop-all.sh</span>
+<span class="cmd">$SPARK_HOME/sbin/start-all.sh</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-card-header">⚠ ERROR 03 — JAVA_HOME no definido</div>
+      <div class="error-card-body">
+        <div class="error-msg">Error: JAVA_HOME is not set and could not be found.</div>
+        <div class="error-sol-title">✓ Causa</div>
+        <div class="error-sol-desc">La variable JAVA_HOME no está definida en la sesión actual.</div>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Solución</span>
+          </div>
+          <pre><span class="comment"># Verificar que está en ~/.bashrc</span>
+<span class="cmd">grep</span> JAVA_HOME ~/.bashrc
+
+<span class="comment"># Si no aparece, agregarlo:</span>
+<span class="cmd">echo</span> <span class="value">'export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64'</span> >> ~/.bashrc
+
+<span class="comment"># Recargar configuración</span>
+<span class="cmd">source</span> ~/.bashrc
+
+<span class="comment"># Verificar</span>
+<span class="cmd">echo</span> $JAVA_HOME</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-card-header">⚠ ERROR 04 — KeyError: 'customer_segment'</div>
+      <div class="error-card-body">
+        <div class="error-msg">KeyError: 'customer_segment'</div>
+        <div class="error-sol-title">✓ Causa</div>
+        <div class="error-sol-desc">El CSV generado por PySpark no tiene esa columna, o el nombre es diferente (espacios, mayúsculas).</div>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">Python — Diagnóstico</span>
+          </div>
+          <pre><span class="py-kw">import</span> pandas <span class="py-kw">as</span> pd
+df = pd.<span class="py-fn">read_csv</span>(<span class="py-str">"/home/hadoop/data/kpi_sales.csv"</span>)
+<span class="py-cmt"># Ver todas las columnas disponibles</span>
+<span class="py-kw">print</span>(df.columns.<span class="py-fn">tolist</span>())</pre>
+        </div>
+        <div class="error-sol-desc">Ajustar el nombre en app.py a como aparezca exactamente (incluyendo mayúsculas y underscores).</div>
+      </div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-card-header">⚠ ERROR 05 — DataNodes no conectan al NameNode</div>
+      <div class="error-card-body">
+        <div class="error-msg">java.io.IOException: Incompatible clusterIDs</div>
+        <div class="error-sol-title">✓ Causa</div>
+        <div class="error-sol-desc">Se formateó el NameNode más de una vez, generando un nuevo clusterID que no coincide con el que tienen los DataNodes.</div>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div>
+            <span class="code-lang">BASH — Solución</span>
+          </div>
+          <pre><span class="comment"># Detener Hadoop</span>
+<span class="cmd">stop-dfs.sh</span>
+
+<span class="comment"># Limpiar datos de DataNodes EN CADA WORKER</span>
+<span class="cmd">ssh</span> worker1 <span class="value">"rm -rf /home/hadoop/hdfs/datanode/*"</span>
+<span class="cmd">ssh</span> worker2 <span class="value">"rm -rf /home/hadoop/hdfs/datanode/*"</span>
+<span class="cmd">ssh</span> worker3 <span class="value">"rm -rf /home/hadoop/hdfs/datanode/*"</span>
+
+<span class="comment"># Limpiar datos del NameNode</span>
+<span class="cmd">rm</span> <span class="flag">-rf</span> /home/hadoop/hdfs/namenode/*
+
+<span class="comment"># Re-formatear el NameNode</span>
+<span class="cmd">hdfs</span> namenode <span class="flag">-format</span>
+
+<span class="comment"># Reiniciar HDFS</span>
+<span class="cmd">start-dfs.sh</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-card-header">⚠ ERROR 06 — Gráficos con texto invisible (gris sobre blanco)</div>
+      <div class="error-card-body">
+        <div class="error-msg">Ejes y etiquetas de Plotly no se ven en Streamlit (color gris muy claro)</div>
+        <div class="error-sol-title">✓ Causa</div>
+        <div class="error-sol-desc">Plotly aplica un tema automático con bajo contraste que mezcla el texto con el fondo blanco de Streamlit.</div>
+        <div class="error-sol-title">✓ Solución</div>
+        <div class="error-sol-desc">Aplicar el objeto <code>PLOTLY_LAYOUT</code> global con <code>font color="black"</code> en todos los gráficos mediante <code>fig.update_layout(**PLOTLY_LAYOUT)</code>.</div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<footer>
+  <div>
+    <strong style="color:var(--text)">RetailMax Big Data</strong> — Manual Técnico v2.0
+  </div>
+  <span>Hadoop 3.3.6 + Spark 3.5.1 + Streamlit + Python 3.11</span>
+</footer>
+
+</body>
+</html>
